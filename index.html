@@ -142,10 +142,14 @@ $("copyBtn").onclick=async()=>{
 };
 $("f").addEventListener("submit",async e=>{
   e.preventDefault();
+  // 手機若只打 10 碼數字（例如 0912345678），先改成 0912-345-678 再送出，
+  // 否則試算表會把前面的 0 當數字吃掉，後台看到的手機會少一個 0。
+  let phone=$("phone").value.trim().replace(/\s/g,"");
+  if(/^09\d{8}$/.test(phone)) phone=phone.slice(0,4)+"-"+phone.slice(4,7)+"-"+phone.slice(7);
   const data={
     zone:$("zone").value, unitType:$("unitType").value, unitName:$("unitName").value.trim(),
     club:$("club").value.trim(), coordinated:$("coordinated").value,
-    contactName:$("contactName").value.trim(), phone:$("phone").value.trim(), email:$("email").value.trim(),
+    contactName:$("contactName").value.trim(), phone:phone, email:$("email").value.trim(),
     boothSign:$("boothSign").value.trim(), certName:$("certName").value.trim(),
     category:$("category").value.trim(), detail:$("detail").value.trim(), nature:$("nature").value,
     needPower:$("needPower").value, powerDetail:$("powerDetail").value.trim(), watts:$("watts").value.trim(),
