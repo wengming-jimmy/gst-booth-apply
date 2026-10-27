@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GST 八大志業公益嘉年華｜攤位申請</title>
+<meta name="robots" content="noindex">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:#eef4f1;color:#1e2a26}
+header{background:#0f766e;color:#fff;padding:22px 18px;text-align:center}
+header h1{margin:0;font-size:26px} header p{margin:8px 0 0;line-height:1.7;color:#d1fae5}
+main{max-width:700px;margin:0 auto;padding:16px 14px 48px}
+section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+h2{font-size:19px;margin:0 0 6px} p.lead{color:#5b6b66;line-height:1.7;margin:0 0 12px}
+label{display:block;font-weight:800;margin:14px 0 6px}
+input[type=text],input[type=tel],input[type=email],input[type=number],textarea,select{width:100%;padding:13px;border:2px solid #cbd8d2;border-radius:12px;font-size:17px;background:#fff}
+textarea{line-height:1.65}
+button{width:100%;padding:14px;border:0;border-radius:14px;font-size:17px;font-weight:900;cursor:pointer}
+.primary{background:#0f766e;color:#fff;margin-top:16px}
+.ghost{background:#e6f4f1;color:#0f766e;margin-top:10px}
+.small{font-size:14px;color:#6b7a75;line-height:1.7}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:700;line-height:1.6;margin-top:12px}
+.check input{width:20px;height:20px;margin-top:3px;flex-shrink:0}
+.warn{background:#fff7cc;border:2px solid #e6a700;border-radius:12px;padding:12px;line-height:1.7;display:none}
+.ok{color:#0f766e;font-weight:800}
+pre.confirm{white-space:pre-wrap;word-break:break-word;background:#f1f5f2;border:2px solid #cbd8d2;border-radius:12px;padding:14px;line-height:1.7;font-size:15px;font-family:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>🎪 GST 八大志業公益嘉年華｜攤位申請</h1><p>115 年 12 月 19 日（星期六）09:00 報到／09:30 開始／16:00 結束<br>台北市花博公園長廊廣場及花海廣場全區<br>報名截止：115 年 11 月 15 日</p></header>
+<main>
+<section>
+<h2>攤位需求填寫</h2>
+<p class="lead">填完送出後，畫面會先給你一份確認文字可以複製，同時系統會寄一封感謝信到你填的 Email，信裡附上同一份內容給你再確認一次。提醒：收到信代表「已收到申請」，不是「已核准攤位」，最終分配需由專區主席確認後再通知。</p>
+<p class="small">規則：攤位皆酌收 15% 公益基金作為活動費用贊助款；一個專區提供 6 個 3×3 米帳篷，請先與專區主席協調，不要超過；現場不可使用明火；一個專區的用電量以 1000 瓦為限，請與專區主席確認後填寫。</p>
+<form id="f">
+<label for="zone">專區 ＊</label>
+<select id="zone" required>
+<option value="">請選專區</option>
+<option>第一專區</option><option>第二專區</option><option>第三專區</option><option>第四專區</option>
+<option>第五專區</option><option>第六專區</option><option>第七專區</option><option>第八專區</option>
+<option>第九專區</option><option>第十專區</option><option>第十一專區</option><option>第十二專區</option>
+<option>第十三專區</option><option>非專區公益攤位</option>
+</select>
+
+<label for="unitType">申請單位類型 ＊</label>
+<select id="unitType" required>
+<option value="">請選類型</option>
+<option>分會</option><option>委員會</option><option>公益團體</option><option>廠商</option><option>局處／公部門</option><option>其他</option>
+</select>
+
+<label for="unitName">申請單位全名 ＊</label>
+<input id="unitName" type="text" required placeholder="例如：台北市○○獅子會、○○有限公司">
+
+<label for="club">攤位所屬分會</label>
+<input id="club" type="text" placeholder="分會申請請填，公益團體／廠商可不填">
+
+<label for="coordinated">是否已與專區主席協調 ＊</label>
+<select id="coordinated" required>
+<option value="">請選</option><option>是，已協調</option><option>否，尚未協調</option>
+</select>
+
+<label for="contactName">聯絡人姓名 ＊</label>
+<input id="contactName" type="text" required placeholder="例如：王小明">
+
+<div class="row">
+<div><label for="phone">聯絡人手機 ＊</label><input id="phone" type="tel" required placeholder="例如：0912-345-678"></div>
+<div><label for="email">Email ＊（感謝信會寄到這裡）</label><input id="email" type="email" required placeholder="例如：abc@example.com"></div>
+</div>
+
+<label for="boothSign">攤位牌文字 ＊（當天要掛什麼，一字不改照印）</label>
+<input id="boothSign" type="text" required placeholder="例如：台北市○○獅子會 愛心義賣攤位">
+
+<label for="certName">感謝狀抬頭 ＊（感謝狀要寫的單位全名）</label>
+<input id="certName" type="text" required placeholder="例如：台北市○○獅子會">
+<label style="font-weight:700;margin-top:6px"><input type="checkbox" id="sameCert"> 感謝狀抬頭跟攤位牌文字一樣，自動帶入</label>
+
+<label for="category">攤位內容分類 ＊（填分類即可，不須一一列出）</label>
+<input id="category" type="text" required placeholder="例如：便當、手搖飲、罐裝飲料、服飾、滷味、義診、宣導">
+
+<label for="detail">詳細品項／服務說明</label>
+<textarea id="detail" rows="3" placeholder="例如：滷味拼盤、古早味紅茶；或：血糖篩檢、視力檢查宣導"></textarea>
+
+<label for="nature">攤位性質 ＊</label>
+<select id="nature" required>
+<option value="">請選</option><option>販售</option><option>義賣</option><option>宣導</option><option>篩檢／義診</option><option>其他</option>
+</select>
+
+<label for="needPower">攤位是否需要用電 ＊</label>
+<select id="needPower" required>
+<option value="">請選</option><option>不需要用電</option><option>需要用電</option>
+</select>
+
+<div id="powerWrap" style="display:none">
+<label for="powerDetail">須用電之電器及數量</label>
+<input id="powerDetail" type="text" placeholder="例如：電鍋 1 個、電磁爐 1 個">
+<label for="watts">預估總瓦數</label>
+<input id="watts" type="number" min="0" placeholder="例如：800">
+<p class="warn" id="wattWarn">⚠️ 預估總瓦數超過 1000 瓦：一個專區的用電量以 1000 瓦為限，請先與專區主席確認，否則現場可能無法供電。</p>
+</div>
+
+<label for="otherNeed">其他需求（桌椅、220V、特殊需求等）</label>
+<textarea id="otherNeed" rows="3" placeholder="例如：需多 1 張長桌、需 220V 電源"></textarea>
+
+<label for="note">備註</label>
+<textarea id="note" rows="2" placeholder="其他想補充的事"></textarea>
+
+<label class="check"><input type="checkbox" id="agreeFee" required> 我已了解：攤位皆酌收 15% 公益基金作為活動費用贊助款。</label>
+<label class="check"><input type="checkbox" id="agreeFire" required> 我確認：當天現場不使用明火。</label>
+
+<button class="primary" type="submit" id="submitBtn">✅ 送出攤位申請</button>
+<p id="msg" class="small"></p>
+<p class="small">提醒：這支程式只收上面這些申請資料，不收密碼、身分證、銀行帳號或驗證碼。送出後請等感謝信，沒收到信先檢查垃圾信件夾，還是沒有就直接聯絡主辦單位。</p>
+</form>
+</section>
+
+<section id="resultSec" style="display:none">
+<h2>✅ 已收到申請，請確認以下內容</h2>
+<p class="lead" id="emailNote"></p>
+<pre class="confirm" id="confirmText"></pre>
+<button class="ghost" id="copyBtn">📋 複製這份確認文字</button>
+<p class="small" id="copyMsg"></p>
+<p class="small">如果上面有錯，請直接回覆感謝信更正，或重新填一次並在備註寫「更正前一筆」。最終攤位分配以專區主席確認為準。</p>
+</section>
+</main>
+<script src="config.js?v=20261027"></script>
+<script>
+const $=id=>document.getElementById(id);
+const API=(typeof BOOTH_API!=="undefined"&&BOOTH_API.url)?BOOTH_API.url:"";
+const TOKEN=(typeof BOOTH_API!=="undefined"&&BOOTH_API.token)?BOOTH_API.token:"";
+$("needPower").addEventListener("change",()=>{ $("powerWrap").style.display=$("needPower").value==="需要用電"?"block":"none"; });
+$("sameCert").addEventListener("change",()=>{ if($("sameCert").checked) $("certName").value=$("boothSign").value; });
+$("boothSign").addEventListener("input",()=>{ if($("sameCert").checked) $("certName").value=$("boothSign").value; });
+$("watts").addEventListener("input",()=>{ const w=Number($("watts").value||0); $("wattWarn").style.display=w>1000?"block":"none"; });
+$("copyBtn").onclick=async()=>{
+  const t=$("confirmText").textContent;
+  try{ await navigator.clipboard.writeText(t); $("copyMsg").textContent="✅ 已複製確認文字。"; }
+  catch(e){ const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); $("copyMsg").textContent="✅ 已複製確認文字。"; }
+};
+$("f").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const data={
+    zone:$("zone").value, unitType:$("unitType").value, unitName:$("unitName").value.trim(),
+    club:$("club").value.trim(), coordinated:$("coordinated").value,
+    contactName:$("contactName").value.trim(), phone:$("phone").value.trim(), email:$("email").value.trim(),
+    boothSign:$("boothSign").value.trim(), certName:$("certName").value.trim(),
+    category:$("category").value.trim(), detail:$("detail").value.trim(), nature:$("nature").value,
+    needPower:$("needPower").value, powerDetail:$("powerDetail").value.trim(), watts:$("watts").value.trim(),
+    otherNeed:$("otherNeed").value.trim(), note:$("note").value.trim()
+  };
+  const missing=[];
+  ["zone","unitType","unitName","coordinated","contactName","phone","email","boothSign","certName","category","nature","needPower"].forEach(k=>{ if(!data[k]) missing.push(k); });
+  if(missing.length){ alert("還有必填欄位沒填，請檢查後再送出。"); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){ alert("Email 格式不對，請檢查後再送出。"); return; }
+  if(!$("agreeFee").checked||!$("agreeFire").checked){ alert("請勾選 15% 公益基金與不使用明火兩項確認。"); return; }
+  if(data.needPower==="需要用電"&&!data.powerDetail){ if(!confirm("你選了需要用電，但還沒填電器及數量，確定要這樣送出嗎？")) return; }
+  if(!API){ $("msg").innerHTML="⚠️ 資料庫還沒接好，這筆還沒寫入。請等部署完成後再送一次。"; return; }
+  $("submitBtn").disabled=true; $("submitBtn").textContent="送出中…"; $("msg").textContent="";
+  try{
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(Object.assign({token:TOKEN},data))});
+    const j=await r.json();
+    if(!j.ok) throw new Error(j.error||"fail");
+    $("confirmText").textContent=j.text||"";
+    $("emailNote").innerHTML=j.emailOk
+      ? "✅ 已寫入申請表，感謝信已寄到 <b>"+data.email+"</b>，信裡附上同一份內容，請再確認一次。沒看到信請先看垃圾信件夾。"
+      : "⚠️ 已寫入申請表，但感謝信寄送失敗（"+(j.emailErr||"原因不明")+"）。請先複製下面這份確認文字留存，並直接聯絡主辦單位確認。";
+    $("resultSec").style.display="block";
+    $("resultSec").scrollIntoView({behavior:"smooth"});
+    $("msg").innerHTML="<span class='ok'>✅ 已送出申請。</span>";
+    $("f").reset(); $("powerWrap").style.display="none";
+  }catch(err){
+    $("msg").textContent="⚠️ 送出失敗（可能是網路或資料庫還沒部署好），請確認網路後再按一次送出，不要重複填新的一筆。";
+  }
+  $("submitBtn").disabled=false; $("submitBtn").textContent="✅ 送出攤位申請";
+});
+</script>
+</body>
+</html>

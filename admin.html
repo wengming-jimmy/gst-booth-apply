@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>後台｜GST 攤位申請</title>
+<meta name="robots" content="noindex">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"PingFang TC","Microsoft JhengHei",system-ui,sans-serif;background:#eef4f1;color:#1e2a26}
+header{background:#0f766e;color:#fff;padding:22px 18px;text-align:center}
+header h1{margin:0;font-size:25px} header p{margin:8px 0 0;color:#d1fae5;line-height:1.6}
+main{max-width:760px;margin:0 auto;padding:16px 14px 48px}
+section{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+h2{font-size:20px;margin:0 0 6px} p.lead{color:#5b6b66;line-height:1.65;margin:0 0 12px}
+label{display:block;font-weight:800;margin:14px 0 6px}
+input[type=text],input[type=password],select{width:100%;padding:13px;border:2px solid #cbd8d2;border-radius:12px;font-size:17px}
+button{width:100%;padding:13px;border:0;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer}
+.primary{background:#0f766e;color:#fff;margin-top:12px} .ghost{background:#e6f4f1;color:#0f766e;margin-top:10px} .danger{background:#fff0f0;color:#b00000;margin-top:10px}
+.small{font-size:14px;color:#6b7a75;line-height:1.65}
+.item{border-top:1px solid #e2e8e5;padding:14px 0;line-height:1.65}
+.badge{display:inline-block;border-radius:999px;padding:3px 10px;font-size:14px;font-weight:800}
+.wait{background:#fef3c7;color:#92400e} .ok{background:#d1fae5;color:#065f46}
+.actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}.actions button{margin:0;padding:9px;font-size:14px;width:auto;flex:1}
+pre.confirm{white-space:pre-wrap;word-break:break-word;background:#f1f5f2;border:1px solid #cbd8d2;border-radius:12px;padding:12px;line-height:1.65;font-size:14px;font-family:inherit}
+</style>
+</head>
+<body>
+<header><h1>🔒 後台｜GST 攤位申請</h1><p>這個後台連結請不要公開貼出。<br>公開申請頁面沒有名單，只有這裡看得到明細。</p></header>
+<main>
+<section id="lockSec"><h2>🔑 後台密碼</h2><div id="lockBody"></div>
+<p class="small">提醒：這是存在你這支手機／電腦上的簡易鎖，用來擋住隨手點開的人，不是銀行等級的帳號密碼。真正保密要靠：不要把這個連結公開貼出，不要把解鎖後的手機借給別人。</p></section>
+<div id="adminBody" style="display:none">
+<section>
+<h2>📋 攤位申請名單</h2>
+<p class="lead">版本 2026-10-27。預設顯示全部申請，選專區或打關鍵字可以篩選；匯出會只匯出目前看到的這批。</p>
+<label for="qZone">按專區篩選</label>
+<select id="qZone"><option value="">全部專區</option>
+<option>第一專區</option><option>第二專區</option><option>第三專區</option><option>第四專區</option>
+<option>第五專區</option><option>第六專區</option><option>第七專區</option><option>第八專區</option>
+<option>第九專區</option><option>第十專區</option><option>第十一專區</option><option>第十二專區</option>
+<option>第十三專區</option><option>非專區公益攤位</option></select>
+<input id="qName" type="text" placeholder="🔍 單位、聯絡人、攤位牌或感謝狀關鍵字（可不填）">
+<p class="small" id="dbNote">正在準備載入…</p>
+<p class="small" id="count"></p>
+<button class="ghost" id="btnReload">🔄 從資料庫重新載入</button>
+<button class="ghost" id="btnExport">⬇️ 匯出目前查詢結果 CSV</button>
+<button class="ghost" id="lockBtn">🔒 鎖定後台</button>
+<button class="ghost" id="changePinBtn">🔑 換一個後台密碼</button>
+</section>
+<section><h2>📋 明細</h2><div id="list"></div></section>
+</div>
+</main>
+<script src="config.js?v=20261027"></script>
+<script>
+const $=id=>document.getElementById(id);
+const API=(typeof BOOTH_API!=="undefined"&&BOOTH_API.url)?BOOTH_API.url:"";
+const TOKEN=(typeof BOOTH_API!=="undefined"&&BOOTH_API.token)?BOOTH_API.token:"";
+const PINKEY="gst-booth-admin-pin-v1";
+let allRows=[],viewRows=[];
+function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  const q=($("qName").value||"").trim();
+  const z=$("qZone").value;
+  let list=allRows;
+  if(z) list=list.filter(r=>r.zone===z);
+  if(q) list=list.filter(r=>(r.unitName+r.contactName+r.boothSign+r.certName+r.club+r.category).includes(q));
+  viewRows=list;
+  $("count").textContent="目前共 "+allRows.length+" 筆，篩到 "+list.length+" 筆。";
+  $("list").innerHTML=list.length?list.map(r=>`<div class="item"><b>${esc(r.unitName)}</b> ・ ${esc(r.zone)} <span class="badge ${r.status==="已核准"?"ok":"wait"}">${esc(r.status)}</span><br>
+  <span class="small">聯絡人：${esc(r.contactName)} ・ ${esc(r.phone)} ・ ${esc(r.email)}<br>
+  所屬分會：${esc(r.club)||"—"} ・ 專區主席已協調：${esc(r.coordinated)} ・ 類型：${esc(r.unitType)} ・ 性質：${esc(r.nature)}<br>
+  攤位牌：${esc(r.boothSign)}<br>感謝狀抬頭：${esc(r.certName)}<br>
+  內容分類：${esc(r.category)}${r.detail?" ・ "+esc(r.detail):""}<br>
+  用電：${esc(r.needPower)}${r.powerDetail?" ・ "+esc(r.powerDetail):""}${r.watts?" ・ "+esc(r.watts)+" 瓦":""}${r.otherNeed?"<br>其他需求："+esc(r.otherNeed):""}${r.note?"<br>備註："+esc(r.note):""}<br>
+  填寫時間：${esc(r.createdAt)}</span>
+  <details><summary>看這筆的確認文字</summary><pre class="confirm">${esc(r.text)}</pre></details>
+  <div class="actions"><button class="ghost" onclick="setStatus(${r.row},'已核准')">標記為已核准</button><button class="ghost" onclick="setStatus(${r.row},'待專區主席確認')">改回待確認</button><button class="danger" onclick="delRow(${r.row})">刪除這筆</button></div></div>`).join(""):"<p>目前沒有紀錄。</p>";
+}
+$("qZone").addEventListener("change",render);
+$("qName").addEventListener("input",render);
+$("btnReload").onclick=loadDb;
+$("btnExport").onclick=()=>{
+  if(!viewRows.length){alert("目前沒有可以匯出的紀錄。");return;}
+  const rows=[["填寫時間","專區","申請單位類型","申請單位全名","所屬分會","專區主席已協調","聯絡人姓名","聯絡人手機","Email","攤位牌文字","感謝狀抬頭","攤位內容分類","詳細品項／服務說明","攤位性質","是否用電","用電電器及數量","預估總瓦數","其他需求","備註","申請狀態"]];
+  viewRows.forEach(r=>rows.push([r.createdAt,r.zone,r.unitType,r.unitName,r.club,r.coordinated,r.contactName,r.phone,r.email,r.boothSign,r.certName,r.category,r.detail,r.nature,r.needPower,r.powerDetail,r.watts,r.otherNeed,r.note,r.status]));
+  const csv="\ufeff"+rows.map(x=>x.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download="GST攤位申請.csv";a.click();URL.revokeObjectURL(a.href);
+};
+window.delRow=row=>{if(!confirm("確定要從資料庫刪除這筆嗎？刪除後無法復原，建議先匯出備份。"))return;
+  fetch(API+"?action=delete&token="+encodeURIComponent(TOKEN)+"&row="+row).then(()=>{allRows=allRows.filter(x=>x.row!==row);render();}).catch(()=>alert("刪除失敗，請直接到試算表刪除該列。"));};
+window.setStatus=(row,status)=>{ fetch(API+"?action=setStatus&token="+encodeURIComponent(TOKEN)+"&row="+row+"&status="+encodeURIComponent(status)).then(()=>{const r=allRows.find(x=>x.row===row); if(r) r.status=status; render();}).catch(()=>alert("狀態更新失敗，請直接到試算表修改。")); };
+function loadDb(){
+  if(!API){$("dbNote").textContent="設定檔還沒填資料庫網址：請等部署完成、config.js 更新後，關掉分頁重開後台一次。";return;}
+  $("dbNote").textContent="正在從資料庫載入…";
+  fetch(API+"?action=list&token="+encodeURIComponent(TOKEN)).then(r=>r.json()).then(j=>{if(!j.ok)throw 0;allRows=j.rows;$("dbNote").textContent="✅ 已載入 "+allRows.length+" 筆。";render();})
+  .catch(()=>{$("dbNote").textContent="⚠️ 載入失敗（可能是試算表尚未部署或網路問題），請直接打開試算表確認，裡面的資料就是後台資料。";});
+}
+function unlock(){sessionStorage.setItem("gst-booth-admin-unlocked","1");$("lockSec").style.display="none";$("adminBody").style.display="block";loadDb();}
+function showLock(){
+  const pin=localStorage.getItem(PINKEY);
+  if(!pin){$("lockBody").innerHTML=`<p class="lead">第一次開後台，請先設一個你記得住的後台密碼。</p><label>設定後台密碼</label><input id="newPin" type="password" placeholder="至少 4 個字"><button class="primary" id="setPinBtn">設定並進入後台</button>`;
+    $("setPinBtn").onclick=()=>{const v=$("newPin").value.trim();if(v.length<4){alert("密碼至少 4 個字。");return;}localStorage.setItem(PINKEY,v);unlock();};}
+  else{$("lockBody").innerHTML=`<label>請輸入後台密碼</label><input id="pinIn" type="password" placeholder="輸入後台密碼"><button class="primary" id="unlockBtn">進入後台</button><button class="ghost" id="forgetBtn">忘記密碼（只清除密碼鎖，名單不會刪）</button>`;
+    $("unlockBtn").onclick=()=>{if($("pinIn").value===pin)unlock();else alert("密碼不對，請再試一次。");};
+    $("forgetBtn").onclick=()=>{if(confirm("確定要清除後台密碼鎖嗎？紀錄不會被刪除，下次開後台會請你重新設定密碼。")){localStorage.removeItem(PINKEY);location.reload();}};}
+}
+$("lockBtn").onclick=()=>{sessionStorage.removeItem("gst-booth-admin-unlocked");location.reload();};
+$("changePinBtn").onclick=()=>{const v=prompt("請輸入新的後台密碼（至少 4 個字）：");if(v&&v.trim().length>=4){localStorage.setItem(PINKEY,v.trim());alert("後台密碼已更換。");}else if(v!==null){alert("密碼至少 4 個字，沒有更換。");}};
+if(sessionStorage.getItem("gst-booth-admin-unlocked")==="1")unlock();else showLock();
+</script>
+</body>
+</html>
